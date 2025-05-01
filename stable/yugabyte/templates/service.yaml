@@ -564,6 +564,10 @@ spec:
         image: "{{ $root.Values.Image.repository }}:{{ $root.Values.Image.tag }}"
         imagePullPolicy: "IfNotPresent"
         env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         - name: HOSTNAME
           valueFrom:
             fieldRef:
