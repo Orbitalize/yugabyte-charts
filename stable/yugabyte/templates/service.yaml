@@ -594,12 +594,8 @@ spec:
             while true; do
             {{- end }}
             /home/yugabyte/bin/yugabyted-ui \
-            {{- if eq .name "yb-masters" -}}
-              {{- $rpcAddr := $root.Values.master.rpcBindAddress | default (include "yugabyte.rpc_bind_address" $serviceValues) }}
-            {{- else -}}
-              {{- $rpcAddr := $root.Values.tserver.rpcBindAddress | default (include "yugabyte.rpc_bind_address" $serviceValues) }}
-            {{- end }}
-              -database_host={{ $rpcAddr }} \
+            {{- $rpcAddr := include "yugabyte.rpc_bind_address" $serviceValues }}
+              -database_host=127.0.0.1 \
             {{- $webserverAddr := include "yugabyte.webserver_interface" $serviceValues }}
               -bind_address={{ $webserverAddr }} \
             {{- $masterPort := "7000" }}
