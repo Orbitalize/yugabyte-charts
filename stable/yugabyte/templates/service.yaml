@@ -406,12 +406,10 @@ spec:
           - "-c"
           - |
           {{- if eq .name "yb-masters" }}
-            export PUBLIC_HOSTNAME="{{ $root.Values.master.serverBroadcastAddress }}" && \
-          {{- else }}
-            export PUBLIC_HOSTNAME="{{ $root.Values.tserver.serverBroadcastAddress }}" && \
+            {{- if $root.Values.master.preCommands -}}{{ $root.Values.master.preCommands | nindent 12 }}{{ end -}}
+          {{- else -}}
+            {{- if $root.Values.tserver.preCommands -}}{{ $root.Values.tserver.preCommands | nindent 12 }}{{ end -}}
           {{- end }}
-            sed -E "/\.svc\.cluster\.local/ s/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)([[:space:]]+)/\1 $(echo "$PUBLIC_HOSTNAME" | sed 's/[\/&]/\\&/g')\2/" /etc/hosts > /tmp/newhosts && \
-            /bin/cp /tmp/newhosts /etc/hosts && \
           {{- if and (not $root.Values.preflight.skipUlimit) (not $root.Values.preflight.skipAll) }}
             if [ -f /home/yugabyte/tools/k8s_preflight.py ]; then
               /home/yugabyte/tools/k8s_preflight.py all
