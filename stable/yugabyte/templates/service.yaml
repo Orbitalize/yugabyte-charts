@@ -593,7 +593,7 @@ spec:
             {{- end }}
             /home/yugabyte/bin/yugabyted-ui \
             {{- $rpcAddr := include "yugabyte.rpc_bind_address" $serviceValues }}
-              -database_host= {{ $rpcAddr }} \
+              -database_host={{ $rpcAddr }} \
             {{- $webserverAddr := include "yugabyte.webserver_interface" $serviceValues }}
               -bind_address={{ $webserverAddr }} \
             {{- $masterPort := "7000" }}
